@@ -210,11 +210,10 @@ h1{
 
 
 .btn-orange {
-    background-color: #ff7600;
-    border-bottom:2px solid #d35400;
-    -webkit-border-radius: 20%;
-    -moz-border-radius: 0;
-    border-radius: 20%;
+    background-color: #ff9f4d;
+    -webkit-border-radius: 25%;
+    -moz-border-radius: 25%;
+    border-radius: 25%;
     border: 2px solid;
     color:#ffffff;
 }
@@ -238,13 +237,16 @@ h1{
     color:#ffffff;
 }
 
+
 .btn-read-more{
-    padding:10px 40px 10px 40px;
+    padding:10px 20px 10px 20px;
+    border-radius: 20%;
 
 }
 
-.templatano-btn-read-more{
-    padding:10px 40px 10px 40px;
+.templatemo-btn-read-more{
+    padding:20px 40px 20px 40px;
+    border-radius: 20%;
 
 }
 
@@ -446,7 +448,7 @@ h1{
 
 .team_box  div {
     text-align: center; 
-    padding-top: 100px;
+    padding: 100px;
 }
 
 .span_blog {
