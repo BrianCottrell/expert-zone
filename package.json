@@ -1,0 +1,16 @@
+{
+  "name": "ask-the-expert",
+  "version": "1.0.0",
+  "description": "Developer Week 2016",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian Cottrell",
+  "license": "ISC",
+  "dependencies": {
+    "express": "~4.0.0",
+    "body-parser": "~1.0.1",
+    "ejs": "^1.0.0"
+  }  
+}

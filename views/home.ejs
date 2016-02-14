@@ -1,0 +1,41 @@
+<!-- Ask The Expert    -->
+<!-- by Brian Cottrell -->
+<!-- 02-13-2016        -->
+<!-- Index View        -->
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+    <style>
+        .intro{
+            font-size: 20px;
+            font-family: arial;
+        }
+    </style>
+    <div class='conent'>
+        Hello World
+        <button class='i-to-t'>
+            <p>Image To Text</p>
+        </button>
+    </div>
+    <script>
+    	var apiKey = <%- JSON.stringify(hpApiKey) %>;
+        var imageToTextButton = document.getElementsByClassName('i-to-t')[0];
+        imageToTextButton.addEventListener('click', function(){
+            var xmlhttp = new XMLHttpRequest();
+            var url = 'https://api.idolondemand.com/1/api/sync/ocrdocument/v1?apikey='+apiKey+'&url='+'https://www.w3.org/TR/SVGTiny12/examples/textArea01.png';
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var response = JSON.parse(xmlhttp.responseText);
+                    alert(response.text_block[0].text);
+                }
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        });
+    </script>​
+</body>
+</html>
