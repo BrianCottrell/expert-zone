@@ -118,9 +118,6 @@ for (var i = 0; i < data.length; i++){
     });
 }
 
-setTimeout(function() {
-    console.dir(data);    
-}, 4000);
 
 
 // This line is from the Node.js HTTPS documentation.
@@ -155,6 +152,27 @@ router.route('/')
     });
 })
 
+router.route('/upload')
+.post(function(req, res){
+    var body = ""
+    var wstream = fs.createWriteStream('public/uploads/capture.jpg')
+    req.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    req.on('end', function() {
+      // console.log("uploaded: ", body)
+      var buf = new Buffer(body, 'base64'); 
+      wstream.write(buf);
+      wstream.end(function () { 
+        console.log('done'); 
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end('ok');
+      });
+    });
+
+});
+
 //Add the router and start the server
 app.use(router);
 
@@ -164,3 +182,8 @@ console.log('Listening to port:', port);
 
 // Create an HTTPS service identical to the HTTP service.
 https.createServer(options, app).listen(443);
+
+// setTimeout(function() {
+//     console.dir(data);    
+// }, 4000);
+

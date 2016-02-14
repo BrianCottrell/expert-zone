@@ -50,18 +50,30 @@
 					'<h2>Here is your image:</h2>' + 
 					'<img src="'+data_uri+'"/>';
 //				console.log(data_uri);
-	            $.get("https://api.havenondemand.com/1/api/sync/ocrdocument/v1", 
-	                {   
-	                    file: data_uri, 
-	                    apikey: '438b3ec2-75ab-4201-b2f2-db10d0c40aa1'
-	                }, 
-	                function(data, status, xhr)
-	                {
-	                    alert(data.text_block[0].text);
-	                    // document.getElementsByClassName('image-text')[0].innerHTML=data.text_block[0].text;
-	                },
-	                "json"
-	            );
+					console.log("posting");
+					$.ajax({
+					   url: 'https://localhost/upload',
+					   type: 'POST',
+					   contentType: 'application/octet-stream',  
+					   data: data_uri,
+					   processData: false
+					});
+
+							// $.post("https://localhost/upload", data_uri, 
+
+	      //       // $.post("https://api.havenondemand.com/1/api/sync/ocrdocument/v1", 
+	      //       //     {   
+	      //       //         file: data_uri, 
+	      //       //         apikey: '438b3ec2-75ab-4201-b2f2-db10d0c40aa1'
+	      //       //     }, 
+	      //           function(data, status, xhr)
+	      //           {
+	      //           	console.dir("status = "+status);
+	      //           	console.dir(data);
+	      //               // alert(data.text_block[0].text);
+	      //               // document.getElementsByClassName('image-text')[0].innerHTML=data.text_block[0].text;
+	      //           }
+	      //       );
 			} );
 		}
 	</script>

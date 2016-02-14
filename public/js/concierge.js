@@ -273,6 +273,7 @@ var concierge =
 	            defaultButton.style.textDecoration = 'none';
 	            defaultButton.style.lineHeight = '45px';
 	            defaultButton.style.fontWeight = '200';
+	            defaultButton.style.padding = '20px';
 	            defaultButton.style.letterSpacing = '1px';
 	            defaultButton.style.boxSizing = 'content-box';
 	            defaultButton.style.boxShadow = 'rgba(0, 0, 0, 0.2) 1px 1px 3px 0px';
