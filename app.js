@@ -15,7 +15,7 @@ var router      = express.Router();
 
 var hpApiKey = '438b3ec2-75ab-4201-b2f2-db10d0c40aa1';
 var corticalApiKey = 'e1ed8d60-d2ba-11e5-8378-4dad29be0fab';
-var CitrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
+var citrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
 
 app.use(express.static('public'));
 
@@ -31,24 +31,10 @@ app.use(express.static(path.join(__dirname, '/views')));
 router.route('/')
 //Called when a user navigates to the home page
 .get(function(req, res){
-//     //Create a new traitify assessment
-//     traitify.createAssessment(deckId, function(assessment){
-//         // Use assessment here.
-//         assessmentId = assessment.id;
-//     });
-//     Profile.find(function(err, data){
-//         if(err){
-//             console.log(err);
-//         }
-//         res.status(200).render('home', {
-//             assessmentId: assessmentId,
-//             listData: data,
-//         });
-//     });
     res.status(200).render('home', {
     	hpKey: hpApiKey,
         corticalKey: corticalApiKey,
-        conciergeKey: CitrixApiKey
+        conciergeKey: citrixApiKey
     });
 })
 //Called when a user makes a post to the home page
