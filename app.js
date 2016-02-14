@@ -12,74 +12,73 @@ var path        = require('path');
 var http        = require('http');
 var https       = require('https');
 var fs          = require('fs');
+var fs = require('fs');
 
-var question1 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question2 = 'If an equlilateral triangle has a height of 8, find the length of each side';
-var question3 = 'The Derivative f\'(x) = lim h->0 f(x-h) - f(x)/h Using the definition of the derivative, calculate the derivative of f(x) = x^2 + x - 3';
-var question4 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question5 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question6 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question7 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question8 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question9 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
-var question10 = 'A peice of Granite rock has a mass of 15.5g and a volume of 6.01cm^3. What is the density?';
+var redis = require("redis"),
+    client = redis.createClient({
+        host: "pub-redis-13181.us-east-1-3.7.ec2.redislabs.com",
+        port: 13181
+    });
 
-var image1 = 'https://52.87.242.224/questions/question_1.png';
-var image2 = 'https://52.87.242.224/questions/question_2.png';
-var image3 = 'https://52.87.242.224/questions/question_3.png';
-var image4 = 'https://52.87.242.224/questions/question_1.png';
-var image5 = 'https://52.87.242.224/questions/question_1.png';
-var image6 = 'https://52.87.242.224/questions/question_1.png';
-var image7 = 'https://52.87.242.224/questions/question_1.png';
-var image8 = 'https://52.87.242.224/questions/question_1.png';
-var image9 = 'https://52.87.242.224/questions/question_1.png';
-var image10 = 'https://52.87.242.224/questions/question_1.png';
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
 
-var video1 = 'https://52.87.242.224/videos/video_1.mp4';
-var video2 = 'https://52.87.242.224/videos/video_2.mp4';
-var video3 = 'https://52.87.242.224/videos/video_3.mp4';
-var video4 = 'https://52.87.242.224/videos/video_1.mp4';
-var video5 = 'https://52.87.242.224/videos/video_1.mp4';
-var video6 = 'https://52.87.242.224/videos/video_1.mp4';
-var video7 = 'https://52.87.242.224/videos/video_1.mp4';
-var video8 = 'https://52.87.242.224/videos/video_1.mp4';
-var video9 = 'https://52.87.242.224/videos/video_1.mp4';
-var video10 = 'https://52.87.242.224/videos/video_1.mp4';
+client.keys("asset:*", function (err, replies) {
+    console.log(replies.length + " replies:");
+    replies.forEach(function (reply, i) {
+        console.log("    " + i + ": " + reply);
+    });
+    // client.quit();
+});
 
-var fingerprint1 = '';
-var fingerprint2 = '';
-var fingerprint3 = '';
-var fingerprint4 = '';
-var fingerprint5 = '';
-var fingerprint6 = '';
-var fingerprint7 = '';
-var fingerprint8 = '';
-var fingerprint9 = '';
-var fingerprint10 = '';
+var urlPrefix = "https://52.87.242.224";
 
-var rating1 = '';
-var rating2 = '';
-var rating3 = '';
-var rating4 = '';
-var rating5 = '';
-var rating6 = '';
-var rating7 = '';
-var rating8 = '';
-var rating9 = '';
-var rating10 = '';
+function videoToUrl(video) {
+    return urlPrefix + "/videos/" + video;
+}
 
-var data = [
-        {question: question1, picture: image1, answer: video1, fingerprint: fingerprint1, rating: rating1},
-        {question: question2, picture: image2, answer: video2, fingerprint: fingerprint2, rating: rating2},
-        {question: question3, picture: image3, answer: video3, fingerprint: fingerprint3, rating: rating3},
-        {question: question4, picture: image4, answer: video4, fingerprint: fingerprint4, rating: rating4},
-        {question: question5, picture: image5, answer: video5, fingerprint: fingerprint5, rating: rating5},
-        {question: question6, picture: image6, answer: video6, fingerprint: fingerprint6, rating: rating6},
-        {question: question7, picture: image7, answer: video7, fingerprint: fingerprint7, rating: rating7},
-        {question: question8, picture: image8, answer: video8, fingerprint: fingerprint8, rating: rating8},
-        {question: question9, picture: image9, answer: video9, fingerprint: fingerprint9, rating: rating9},
-        {question: question10, picture: image10, answer: video10, fingerprint: fingerprint10, rating: rating10}
-    ]
+function imageToUrl(image) {
+    return urlPrefix + "/questions/" + image;
+}
+
+var data = [];
+
+function update(index) {
+    var i = index+1;
+    client.hget("asset:"+i, "video", function (err, reply) {
+        // console.log("video reply: "+reply);
+        data[index]["answer"] = videoToUrl(reply);
+    });
+    client.hget("asset:"+i, "image", function (err, reply) {
+        // console.log("video reply: "+reply);
+        data[index]["picture"] = imageToUrl(reply);
+    });
+    client.hget("asset:"+i, "question", function (err, reply) {
+        // console.log("video reply: "+reply);
+        data[index]["question"] = reply;
+    });
+
+}
+
+var i;
+for (i=0; i<=9; i++) {
+    data.push(
+        {
+            question: "", 
+            picture: "", 
+            answer: "", 
+            fingerprint: "value",
+            rating: 4
+        }
+    );    
+    update(i);
+}
+
+setTimeout(function() {
+    console.dir(data);    
+}, 4000);
+
 
 // This line is from the Node.js HTTPS documentation.
 var options = {
@@ -123,20 +122,20 @@ app.use(router);
 
 var request = require('request');
 
-let Klassy = {};
+var Klassy = {};
 
 Klassy.post = function(bodyText, doneFunc) {
 
-  let apiUrl = 'http://api.cortical.io:80/rest/text';
-  let requestData = {
+  var apiUrl = 'http://api.cortical.io:80/rest/text';
+  var requestData = {
     body: bodyText
   };
 
-  let urlParams = {
+  var urlParams = {
     retina_name: 'en_associative'
   };
 
-  let options = {
+  var options = {
     url: apiUrl,
     // formData: formData,
     qs: urlParams,
@@ -173,7 +172,7 @@ Klassy.post = function(bodyText, doneFunc) {
 };
 
 Klassy.test = function() {
-  let bodyText = "some long and interesting piece of maybe a bit weird text";
+  var bodyText = "some long and interesting piece of maybe a bit weird text";
   Klassy.post( bodyText, function() {
     console.log("done");
   });
