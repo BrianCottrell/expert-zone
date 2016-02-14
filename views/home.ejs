@@ -41,16 +41,6 @@
         var citrixApiKey = <%- JSON.stringify(conciergeKey) %>;
         var imageToTextButton = document.getElementsByClassName('i-to-t')[0];
         imageToTextButton.addEventListener('click', function(){
-            // var xmlhttp = new XMLHttpRequest();
-            // var url = 'http://cs-server.usc.edu:28154/uploads/capture.jpg';
-            // xmlhttp.onreadystatechange = function() {
-            //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            //         var response = JSON.parse(xmlhttp.responseText);
-            //         alert(response.text_block[0].text);
-            //     }
-            // }
-            // xmlhttp.open("GET", url, true);
-            // xmlhttp.send();
             $.get("https://api.havenondemand.com/1/api/sync/ocrdocument/v1", 
                 {   
                     url: 'http://cs-server.usc.edu:28154/uploads/capture.jpg', 
@@ -65,7 +55,8 @@
             );
         });
 
-        answerButton = document.getElementsByClassName('i-to-t')[0];
+        var answerButton = document.getElementsByClassName('i-to-t')[0];
+        var data = <%- JSON.stringify(appData) %>;
 
         concierge.setApplicationKey(citrixApiKey);
         concierge.addDefaultButton('Contact This Expert');
