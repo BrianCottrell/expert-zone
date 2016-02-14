@@ -39,6 +39,13 @@
 	<form>
 		<input type=button value="Take Snapshot" onClick="take_snapshot()">
 	</form>
+
+
+	<a href="answers.html">Submit Question</a>
+<!-- 	<form action="/answers.html">
+		<input type=button value="Submit Question">
+	</form>
+ -->
 	
 	<!-- Code to handle taking the snapshot and displaying it locally -->
 	<script language="JavaScript">
@@ -52,7 +59,8 @@
 //				console.log(data_uri);
 					console.log("posting");
 					$.ajax({
-					   url: 'https://52.87.242.224/upload',
+					   url: 'https://localhost/upload',
+					   // url: 'https://52.87.242.224/upload',
 					   type: 'POST',
 					   contentType: 'application/octet-stream',  
 					   data: data_uri,
