@@ -6,7 +6,8 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src='https://websdk.live.gotoassist.com/concierge.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 </head>
 <body>
     <style>
@@ -17,16 +18,27 @@
     </style>
     <div class='conent'>
         Hello World
+        <a href='http://cs-server.usc.edu:28154/image_capture.html'>
+            <button class='photo'>
+                <p>Photograph Text</p>
+            </button>
+        </a>
         <button class='i-to-t'>
             <p>Image To Text</p>
         </button>
+        <DefaultButton onClick='concierge.open()'>
+            <button class='start-chat'>
+                <p>Open Chat</p>
+            </button>
+        </DefaultButton>
     </div>
     <script>
-    	var apiKey = <%- JSON.stringify(hpApiKey) %>;
+    	var hpApiKey = <%- JSON.stringify(hpKey) %>;
+        var corticalApiKey = <%- JSON.stringify(corticalKey) %>;
         var imageToTextButton = document.getElementsByClassName('i-to-t')[0];
         imageToTextButton.addEventListener('click', function(){
             var xmlhttp = new XMLHttpRequest();
-            var url = 'https://api.idolondemand.com/1/api/sync/ocrdocument/v1?apikey='+apiKey+'&url='+'https://www.w3.org/TR/SVGTiny12/examples/textArea01.png';
+            var url = 'https://api.idolondemand.com/1/api/sync/ocrdocument/v1?apikey='+hpApiKey+'&url='+'https://www.w3.org/TR/SVGTiny12/examples/textArea01.png';
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                     var response = JSON.parse(xmlhttp.responseText);
@@ -36,6 +48,9 @@
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
         });
+
+        concierge.setApplicationKey(<%- JSON.stringify(conciergeKey) %>);
+        concierge.addDefaultButton('Contact This Expert');
     </script>​
 </body>
 </html>

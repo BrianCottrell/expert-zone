@@ -7,36 +7,25 @@ var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
 var path        = require('path');
-//Add user model
-// var Profile     = require('./app/models/profile');
+
 //Set port to 8080
 var port        = process.env.PORT || 8080;
 //Router for making http requests
 var router      = express.Router();
-//Specify a traitify deck to use
-// var deckId      = 'core';
-// var assessmentId;
-// var listData    = '';
+
+var hpApiKey = '438b3ec2-75ab-4201-b2f2-db10d0c40aa1';
+var corticalApiKey = 'e1ed8d60-d2ba-11e5-8378-4dad29be0fab';
+var CitrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
 
 app.use(express.static('public'));
 
 //Configure body body-parser
 app.use(bodyParser.urlencoded({extend:true}));
 app.use(bodyParser.json());
-// //Configure tratify api
-// traitify.setHost('api-sandbox.traitify.com');
-// traitify.setVersion('v1');
-// traitify.setSecretKey('uhutbgmj5eo4thjdvj1di9j9vp');
-// //Create a new traitify assessment
-// traitify.createAssessment(deckId, function(assessment){
-//     // Use assessment here.
-//     assessmentId = assessment.id;
-// });
+
 //Configure view engine and directory path
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '/views')));
-//Connect to the database
-// mongoose.connect('mongodb://ds039441.mongolab.com:39441/briansdatabase');
 
 //Specify routes
 router.route('/')
@@ -57,7 +46,9 @@ router.route('/')
 //         });
 //     });
     res.status(200).render('home', {
-    	hpApiKey: '438b3ec2-75ab-4201-b2f2-db10d0c40aa1'
+    	hpKey: hpApiKey,
+        corticalKey: corticalApiKey,
+        conciergeKey: CitrixApiKey
     });
 })
 //Called when a user makes a post to the home page
