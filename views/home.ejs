@@ -83,7 +83,7 @@
                    
                     <div class="col-md-4">
                     <textarea  name="Question" style="width:300px;">Type a Question for our Experts ...</textarea>
-                        <button type="button" data-toggle="modal" data-target="#profile"  class="templatemo-btn-read-more btn btn-orange"> <img src="images/question.png" alt="icon" /><br> <br> ASK </button>
+                        <button type="button" data-toggle="modal" data-target="#profile"  class="templatemo-btn-read-more btn btn-orange question"> <img src="images/question.png" alt="icon" /><br> <br> ASK </button>
                         <div>
                             <p> See if your question matches some answers already in our database.</p><br> 
                         </div>
@@ -368,7 +368,23 @@
             );
         });
 
-        var answerButton = document.getElementsByClassName('i-to-t')[0];
+        var answerButton = document.getElementsByClassName('question')[0];
+        answerButton.addEventListener('click', function(){
+            console.log('hi');
+            $.post('http://api.cortical.io:80/rest/compare/bulk?retina_name=en_associative&api-key='+corticalApiKey,
+                {
+                    headers: {
+                        'api-key': corticalApiKey
+                    },
+                    type: 'json',
+                    data: [[{term: "car"}, {term: "cat"}], [{term: "car"}, {term: "horse"}]]
+                },
+                function(data, status){
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
+            );
+        });
+
         var data = <%- JSON.stringify(appData) %>;
 
         concierge.setApplicationKey(citrixApiKey);

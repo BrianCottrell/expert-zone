@@ -14,6 +14,10 @@ var https       = require('https');
 var fs          = require('fs');
 var fs = require('fs');
 
+var hpApiKey = '438b3ec2-75ab-4201-b2f2-db10d0c40aa1';
+var corticalApiKey = 'e1ed8d60-d2ba-11e5-8378-4dad29be0fab';
+var citrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
+
 var redis = require("redis"),
     client = redis.createClient({
         host: "pub-redis-13181.us-east-1-3.7.ec2.redislabs.com",
@@ -42,6 +46,8 @@ function imageToUrl(image) {
     return urlPrefix + "/questions/" + image;
 }
 
+var request = require('request');
+
 var data = [];
 
 function update(index) {
@@ -61,8 +67,7 @@ function update(index) {
 
 }
 
-var i;
-for (i=0; i<=9; i++) {
+for (var i=0; i<=9; i++) {
     data.push(
         {
             question: "", 
@@ -74,9 +79,43 @@ for (i=0; i<=9; i++) {
     );    
     update(i);
 }
+console.log(data);
 
 for (var i = 0; i < data.length; i++){
-    data[i].fingerprint = 'test';
+    console.log(data);
+    var apiUrl = 'http://api.cortical.io:80/rest/text';
+    var requestData = {
+    body: 'test' //data[i].question
+    };
+
+    var urlParams = {
+    retina_name: 'en_associative'
+    };
+
+    var responseData
+
+    var options = {
+    url: apiUrl,
+    // formData: formData,
+    qs: urlParams,
+    method: "POST",
+    json: true,
+    headers: {
+        'api-key': corticalApiKey,
+        "Content-type": "application/json",
+        "api-client": "js_1.0",
+        "Accept": "application/json",
+        // 'Content-Length': Buffer.byteLength(bodyText)
+    },
+    body: JSON.stringify(requestData)
+    };
+    request.post( options, function(err, res, body) {
+        if (err) {
+            return console.error('klassy.post failed:', err, body);
+        } else {
+            console.log(body);
+        }
+    });
 }
 
 setTimeout(function() {
@@ -93,10 +132,6 @@ var options = {
 var port        = process.env.PORT || 8080;
 //Router for making http requests
 var router      = express.Router();
-
-var hpApiKey = '438b3ec2-75ab-4201-b2f2-db10d0c40aa1';
-var corticalApiKey = 'e1ed8d60-d2ba-11e5-8378-4dad29be0fab';
-var citrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
 
 app.use(express.static('public'));
 
@@ -122,59 +157,6 @@ router.route('/')
 
 //Add the router and start the server
 app.use(router);
-
-
-var request = require('request');
-
-var Klassy = {};
-
-Klassy.post = function(bodyText, doneFunc) {
-
-  var apiUrl = 'http://api.cortical.io:80/rest/text';
-  var requestData = {
-    body: bodyText
-  };
-
-  var urlParams = {
-    retina_name: 'en_associative'
-  };
-
-  var options = {
-    url: apiUrl,
-    // formData: formData,
-    qs: urlParams,
-    method: "POST",
-    json: true,
-    headers: {
-      'api-key': corticalApiKey,
-      "Content-type": "application/json",
-      "api-client": "js_1.0",
-      "Accept": "application/json",
-      // 'Content-Length': Buffer.byteLength(bodyText)
-    },
-    body: JSON.stringify(requestData)
-  };
-
-  console.log(options);
-
-  request.post( options, function(err, res, body) {
-    res.on('data', function(chunk) {
-      console.log('chunk: ', chunk);
-    });
-
-    if (err) {
-      // WeChat always returns a 200 anyway
-      return console.error('klassy.post failed:', err, body);
-    } else {
-      return body;
-    }
-    doneFunc(body);
-  });
-};
-
-Klassy.post( "some long and interesting piece of maybe a bit weird text", function(body) {
-    console.log(body);
-});
 
 // Create an HTTP service.
 http.createServer(app).listen(port);
