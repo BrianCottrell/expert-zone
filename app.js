@@ -75,6 +75,10 @@ for (i=0; i<=9; i++) {
     update(i);
 }
 
+for (var i = 0; i < data.length; i++){
+    data[i].fingerprint = 'test';
+}
+
 setTimeout(function() {
     console.dir(data);    
 }, 4000);
@@ -162,10 +166,7 @@ Klassy.post = function(bodyText, doneFunc) {
       // WeChat always returns a 200 anyway
       return console.error('klassy.post failed:', err, body);
     } else {
-      console.log("no err");
       console.log("body", body);
-      console.log("code", res.statusCode);
-      console.log("blob", body);
     }
     doneFunc(body);
   });
