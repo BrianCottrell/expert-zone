@@ -7,8 +7,16 @@ var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
 var path        = require('path');
+var http        = require('http');
+var https       = require('https');
+var fs = require('fs');
 
-//Set port to 8080
+// This line is from the Node.js HTTPS documentation.
+var options = {
+  key: fs.readFileSync('ssl/server.key'),
+  cert: fs.readFileSync('ssl/server.crt')
+};
+
 var port        = process.env.PORT || 8080;
 //Router for making http requests
 var router      = express.Router();
@@ -58,5 +66,8 @@ router.route('/')
 // });
 //Add the router and start the server
 app.use(router);
-app.listen(port);
+// Create an HTTP service.
+http.createServer(app).listen(port);
 console.log('Listening to port:', port);
+// Create an HTTPS service identical to the HTTP service.
+https.createServer(options, app).listen(443);
