@@ -166,21 +166,15 @@ Klassy.post = function(bodyText, doneFunc) {
       // WeChat always returns a 200 anyway
       return console.error('klassy.post failed:', err, body);
     } else {
-      console.log("body", body);
+      return body;
     }
     doneFunc(body);
   });
 };
 
-Klassy.test = function() {
-  var bodyText = "some long and interesting piece of maybe a bit weird text";
-  Klassy.post( bodyText, function() {
-    console.log("done");
-  });
-};
-
-Klassy.test();
-
+Klassy.post( "some long and interesting piece of maybe a bit weird text", function(body) {
+    console.log(body);
+});
 
 // Create an HTTP service.
 http.createServer(app).listen(port);
