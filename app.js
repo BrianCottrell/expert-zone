@@ -12,31 +12,22 @@ var path        = require('path');
 var http        = require('http');
 var https       = require('https');
 var fs          = require('fs');
-var fs = require('fs');
+var models      = require('./models.js');
 
 var hpApiKey = '438b3ec2-75ab-4201-b2f2-db10d0c40aa1';
 var corticalApiKey = 'e1ed8d60-d2ba-11e5-8378-4dad29be0fab';
 var citrixApiKey = 'MTMzMzs0Njk=-1bfgt2uvqhkji1xwhz76ua0g831u1iwoyg3of61tnoe4e5wmd3qc4ifg4764ylr1';
 
-var redis = require("redis"),
-    client = redis.createClient({
-        host: "pub-redis-13181.us-east-1-3.7.ec2.redislabs.com",
-        port: 13181
-    });
 
-client.on("error", function (err) {
-    console.log("Error " + err);
-});
+var urlPrefix = "https://52.87.242.224";
 
-client.keys("asset:*", function (err, replies) {
+models.getAssetIds(function (err, replies) {
     console.log(replies.length + " replies:");
     replies.forEach(function (reply, i) {
         console.log("    " + i + ": " + reply);
     });
-    // client.quit();
 });
 
-var urlPrefix = "https://52.87.242.224";
 
 function videoToUrl(video) {
     return urlPrefix + "/videos/" + video;
@@ -52,19 +43,18 @@ var data = [];
 
 function update(index) {
     var i = index+1;
-    client.hget("asset:"+i, "video", function (err, reply) {
+    models.getVideo(i, function (err, reply) {
         // console.log("video reply: "+reply);
         data[index]["answer"] = videoToUrl(reply);
     });
-    client.hget("asset:"+i, "image", function (err, reply) {
-        // console.log("video reply: "+reply);
+    models.getImage(i, function (err, reply) {
+        // console.log("picture reply: "+reply);
         data[index]["picture"] = imageToUrl(reply);
     });
-    client.hget("asset:"+i, "question", function (err, reply) {
-        // console.log("video reply: "+reply);
+    models.getQuestion(i, function (err, reply) {
+        // console.log("question reply: "+reply);
         data[index]["question"] = reply;
     });
-
 }
 
 for (var i=0; i<=9; i++) {
